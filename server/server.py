@@ -12,8 +12,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         print('Got Client: ', addr)
         while True:
             cmd = input("> ")
-            conn.send(cmd)
-            data = conn.recv(1024)
+            conn.sendall(cmd.encode("utf-8"))
+            data = conn.recv(10000)
             if not data:
                 break
             print(f"Received: {data.decode()}")
