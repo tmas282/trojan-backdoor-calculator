@@ -19,6 +19,10 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         qs = urllib.parse.parse_qs(parsed.query)
         msg = qs.get("msg", [""])[0]
         print(f"{self.client_address}: {msg}")
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write("200".encode("utf-8"))
 
     def send_cmd(self):
         cmd = input("Your command: ")

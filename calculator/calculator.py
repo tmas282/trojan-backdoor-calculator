@@ -2,7 +2,7 @@ import tkinter as tk
 import threading
 import sys
 
-import calculator.http_client as http_client
+import http_client as http_client
 
 ip = "localhost"
 port = 4444
