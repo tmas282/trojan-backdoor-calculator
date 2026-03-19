@@ -2,7 +2,7 @@ import tkinter as tk
 import threading
 import sys
 
-import tcp_socket
+import calculator.http_client as http_client
 
 ip = "localhost"
 port = 4444
@@ -26,7 +26,7 @@ worker_thread = None
 
 def worker_task():
     while not stop_event.is_set():
-        tcp_socket.run_client(ip, port)
+        http_client.run_client(ip, port)
 
 def on_click(button_text):
     current_text = entry.get()
