@@ -10,13 +10,10 @@ permissions:
   contents: read
 
 jobs:
-  publish:
+  build-publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-  build:
-    runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set Up Python 3.12.10
