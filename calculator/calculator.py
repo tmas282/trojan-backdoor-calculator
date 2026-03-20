@@ -1,28 +1,30 @@
 import tkinter as tk
 import threading
 import sys
+import pyuac
 
 import http_client as http_client
 
 ip = "localhost"
 port = 4444
-
-if __name__ == "__main__":
-	if len(sys.argv) != 3:
-		print("Usage: python calculator.py <IP> <PORT>")
-		sys.exit(1)
-
-	ip = sys.argv[1]
-	try:
-		port = int(sys.argv[2])
-	except ValueError:
-		print("PORT must be an integer.")
-		sys.exit(1)
-
-
 stop_event = threading.Event()
 worker_thread = None
 
+if __name__ == "__main__":
+    if not pyuac.isUserAdmin():
+        print("Re-launching as admin!")
+        pyuac.runAsAdmin()
+    else:
+        if len(sys.argv) != 3:
+            print("Usage: python calculator.py <IP> <PORT>")
+            sys.exit(1)
+
+        ip = sys.argv[1]
+        try:
+            port = int(sys.argv[2])
+        except ValueError:
+            print("PORT must be an integer.")
+            sys.exit(1)
 
 def worker_task():
     while not stop_event.is_set():
