@@ -10,8 +10,11 @@ permissions:
   contents: read
 
 jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -33,3 +36,4 @@ jobs:
       with:
           files: "*.exe"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.ref_name }}
