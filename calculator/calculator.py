@@ -55,6 +55,7 @@ def on_close():
     root.destroy()
 
 root = tk.Tk()
+root.iconbitmap("calculator.ico")
 root.title("Calculator")
 root.protocol("WM_DELETE_WINDOW", on_close)
 
