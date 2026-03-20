@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set Up and Uploads Calculator Windows Executable/Binaries
+    - name: Set Up Python 3.12.10
       uses: actions/setup-python@v3
       with:
         python-version: "3.12.10"
